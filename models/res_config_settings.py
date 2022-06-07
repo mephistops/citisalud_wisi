@@ -58,9 +58,8 @@ class ResConfigSettings(models.TransientModel):
                                          "fecha_fin": self.psa_date_end
                                      }
                                  })
-        _logger.debug(response.status_code)
-        _logger.debug(response.text)
-        raise UserError(_('La factura ya existe'))
+                                 
+        raise UserError(_(response.status_code))
         # return json.loads(response.text)
 
     def create_invoice(self):
