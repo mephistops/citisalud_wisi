@@ -25,6 +25,12 @@ datos = {
 response = requests.post(url,
                          auth=(username, password),
                          headers={'Content-Type': 'application/json'},
-                         json=datos)
+                         json={
+                             "hash_key": hash_key,
+                             "json": {
+                                 "fecha_ini": psa_date_ini,
+                                 "fecha_fin": psa_date_end
+                             }
+                         })
 
 print(json.loads(response.text))

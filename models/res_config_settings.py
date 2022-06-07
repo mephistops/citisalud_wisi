@@ -46,20 +46,22 @@ class ResConfigSettings(models.TransientModel):
 
     @api.multi
     def get_invoice(self):
-        datos = {
-            "hash_key": self.psa_hash_key,
-            "json": {
-                "fecha_ini": self.psa_date_ini,
-                "fecha_fin": self.psa_date_end
-            }
-        }
+        _logger.info('get_invoice')
 
         response = requests.post(self.psa_url,
                                  auth=(self.psa_username, self.psa_password),
                                  headers={'Content-Type': 'application/json'},
-                                 json=datos)
+                                 json={
+                                     "hash_key": self.psa_hash_key,
+                                     "json": {
+                                         "fecha_ini": self.psa_date_ini,
+                                         "fecha_fin": self.psa_date_end
+                                     }
+                                 })
         _logger.debug(response.status_code)
-        #return json.loads(response.text)
+        _logger.debug(response.text)
+        raise UserError(_('La factura ya existe'))
+        # return json.loads(response.text)
 
     def create_invoice(self):
         lab_req_objs = self.get_invoice()
