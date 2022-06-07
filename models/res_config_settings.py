@@ -3,7 +3,6 @@
 from datetime import date
 from odoo import fields, models, api, _
 import requests
-from requests.auth import HTTPBasicAuth
 import json
 import logging
 from odoo.exceptions import UserError
@@ -45,6 +44,7 @@ class ResConfigSettings(models.TransientModel):
         default='2021-08-01',
     )
 
+    @api.multi
     def get_invoice(self):
         datos = {
             "hash_key": self.psa_hash_key,
@@ -58,14 +58,11 @@ class ResConfigSettings(models.TransientModel):
                                  auth=(self.psa_username, self.psa_password),
                                  headers={'Content-Type': 'application/json'},
                                  json=datos)
+        _logger.debug(response.status_code)
+        #return json.loads(response.text)
 
-        return json.loads(response.text)
-
-    @api.multi
     def create_invoice(self):
         lab_req_objs = self.get_invoice()
-        _logger.debug(lab_req_objs)
-        return True
 
         account_invoice_obj = self.env['account.invoice']
         account_invoice_line_obj = self.env['account.invoice.line']

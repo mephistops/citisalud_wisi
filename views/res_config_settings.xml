@@ -62,7 +62,7 @@
               <div class="o_setting_right_pane">
                 <div class="content-group">
                   <div class="row mt4">
-                    <button string="Cargar Productos" type="object" name="create_invoice" class="oe_highlight" />
+                    <button string="Cargar Productos" type="object" name="get_invoice" class="oe_highlight" />
                   </div>
                 </div>
               </div>
