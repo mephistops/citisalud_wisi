@@ -59,7 +59,7 @@ class ResConfigSettings(models.TransientModel):
                                      }
                                  })
                                  
-        raise UserError(_(response.status_code))
+        raise UserError(_(json.loads(response.text)))
         # return json.loads(response.text)
 
     def create_invoice(self):
