@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date
+from datetime import date, datetime
 from odoo import fields, models, api, _
 import requests
 import json
@@ -75,6 +75,10 @@ class ResConfigSettings(models.TransientModel):
             invoice = account_invoice_obj.search(domain, limit=1)
             if not invoice:
                 new_invoice = account_invoice_obj.create({
+                    'partner_id': '1',
+                    'date': datetime.now(),
+                    'date_invoice': datetime.now(),
+                    'reference': 'Test Module',
                     'unique_code': lab_req_obj['numero_ingreso'],
                     'regime_type': lab_req_obj['tipo_regimen'],
                     'document_type': lab_req_obj['tipo_documento'],
