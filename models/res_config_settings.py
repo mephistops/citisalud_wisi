@@ -44,7 +44,6 @@ class ResConfigSettings(models.TransientModel):
         default='2021-08-01',
     )
 
-    @api.multi
     def get_invoice(self):
         _logger.info('get_invoice')
 
@@ -59,9 +58,9 @@ class ResConfigSettings(models.TransientModel):
                                      }
                                  })
                                  
-        raise UserError(_(json.loads(response.text)))
-        # return json.loads(response.text)
+        return json.loads(response.text)
 
+    @api.multi
     def create_invoice(self):
         lab_req_objs = self.get_invoice()
 
