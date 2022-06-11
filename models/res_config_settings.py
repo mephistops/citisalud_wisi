@@ -60,28 +60,30 @@ class ResConfigSettings(models.TransientModel):
                                 
         return json.loads(response.text)
 
-    @api.multi
     def create_invoice(self):
         _logger.debug('Boton lanzado')
         lab_req_objs = self.get_invoice()
 
-        account_invoice_obj = self.env['account.invoice']
-        account_invoice_line_obj = self.env['account.invoice.line']
+        account_invoice_obj = self.env['account.move']
+        account_invoice_line_obj = self.env['account.move.line']
 
         for lab_req_obj in lab_req_objs['data']:
             domain = [
-                ('unique_code', '=', lab_req_obj['unique_code'])
+                ('unique_code', '=', ''.join(lab_req_obj['origen'], lab_req_obj['numero_ingreso']))
             ]
 
             invoice = account_invoice_obj.search(domain, limit=1)
             if not invoice:
+                _logger.debug('Factura no existe')
                 new_invoice = account_invoice_obj.create({
                     'partner_id': '1',
-                    'type': 'out_invoice',
+                    'move_type': 'out_invoice',
                     'state': 'draft',
+                    'invoide_date': datetime.now(),
                     'date': datetime.now(),
-                    'date_invoice': datetime.now(),
-                    'reference': 'Test Module',
+                    'ref': 'Test Module',
+                    'invoice_line_ids': [],
+                    'company_id': '1',
                     'unique_code': lab_req_obj['numero_ingreso'],
                     'regime_type': lab_req_obj['tipo_regimen'],
                     'document_type': lab_req_obj['tipo_documento'],
@@ -91,7 +93,7 @@ class ResConfigSettings(models.TransientModel):
                     'entry_number': lab_req_obj['numero_ingreso'],
                     'mpre_patient': lab_req_obj['mpre_paciente'],
                 })
-                _logger.debug('Factura creada')
+                return new_invoice.id
             else:
                 _logger.debug('Factura ya existe')
                 raise UserError(_('La factura ya existe'))

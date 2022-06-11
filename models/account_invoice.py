@@ -1,7 +1,7 @@
 from odoo import fields, models
 
 class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+    _inherit = "account.move"
 
     unique_code = fields.Char(string="Token Único", copy=False)
     regime_type = fields.Char(string="Tipo de Régimen")
