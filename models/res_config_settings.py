@@ -48,16 +48,16 @@ class ResConfigSettings(models.TransientModel):
         _logger.info('get_invoice')
 
         response = requests.post(self.psa_url,
-                                 auth=(self.psa_username, self.psa_password),
-                                 headers={'Content-Type': 'application/json'},
-                                 json={
-                                     "hash_key": self.psa_hash_key,
-                                     "json": {
-                                         "fecha_ini": self.psa_date_ini,
-                                         "fecha_fin": self.psa_date_end
-                                     }
-                                 })
-                                 
+                                auth=(self.psa_username, self.psa_password),
+                                headers={'Content-Type': 'application/json'},
+                                json={
+                                    "hash_key": self.psa_hash_key,
+                                    "json": {
+                                        "fecha_ini": self.psa_date_ini,
+                                        "fecha_fin": self.psa_date_end
+                                    }
+                                })
+                                
         return json.loads(response.text)
 
     @api.multi
@@ -88,5 +88,7 @@ class ResConfigSettings(models.TransientModel):
                     'entry_number': lab_req_obj['numero_ingreso'],
                     'mpre_patient': lab_req_obj['mpre_paciente'],
                 })
+                _logger.debug('Factura creada')
             else:
+                _logger.debug('Factura ya existe')
                 raise UserError(_('La factura ya existe'))
