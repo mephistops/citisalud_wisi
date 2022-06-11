@@ -62,6 +62,7 @@ class ResConfigSettings(models.TransientModel):
 
     @api.multi
     def create_invoice(self):
+        _logger.debug('Boton lanzado')
         lab_req_objs = self.get_invoice()
 
         account_invoice_obj = self.env['account.invoice']
@@ -76,6 +77,8 @@ class ResConfigSettings(models.TransientModel):
             if not invoice:
                 new_invoice = account_invoice_obj.create({
                     'partner_id': '1',
+                    'type': 'out_invoice',
+                    'state': 'draft',
                     'date': datetime.now(),
                     'date_invoice': datetime.now(),
                     'reference': 'Test Module',
